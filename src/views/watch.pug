@@ -1,0 +1,21 @@
+extends base.pug
+
+
+block content
+  div#videoContainer
+    video(src="/" + video.fileUrl)
+    div#videoControls
+        button#play Play
+        button#mute 소리 끄기 
+        input(type="range", step="0.01", value=0.02, min="0", max="1")#volume
+        br
+        div 
+            span#currenTime 00:00
+            span  | 
+            span#totalTime 00:00
+        div 
+          input(type="range", step="1", value=0, min="0")#timeline
+        div 
+          button#fullScreen Enter Full Screen
+block scripts
+  script(src="/static/js/videoPlayer.js")
