@@ -2,7 +2,9 @@
 
 var video = document.querySelector("video");
 var playBtn = document.getElementById("play");
+var playBtnIcon = playBtn.querySelector("i");
 var muteBtn = document.getElementById("mute");
+var muteBtnIcon = muteBtn.querySelector("i");
 var totalTime = document.getElementById("totalTime");
 var currenTime = document.getElementById("currenTime");
 var volumeRange = document.getElementById("volume");
@@ -10,7 +12,9 @@ var timeline = document.getElementById("timeline");
 var fullScreen = document.getElementById("fullScreen");
 var videoContainer = document.getElementById("videoContainer");
 var videoControls = document.getElementById("videoControls");
-var volumeValue = 0.5;
+var controlsTimeout = null;
+var constrolsMovementTimeout = null;
+var volumeValue = 0.01;
 video.volume = volumeValue;
 
 var handlePlayClick = function handlePlayClick(e) {
@@ -20,7 +24,7 @@ var handlePlayClick = function handlePlayClick(e) {
     video.pause();
   }
 
-  video.paused ? "Play" : "Pause";
+  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
 var handlePause = function handlePause() {
@@ -38,7 +42,7 @@ var handleMute = function handleMute(e) {
     video.muted = true;
   }
 
-  muteBtn.innerText = video.muted ? "소리 켜기" : "소리 끄기";
+  muteBtnIcon.classList = video.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
@@ -78,21 +82,34 @@ var handleFullScreen = function handleFullScreen() {
 
   if (fullscreen) {
     document.exitFullscreen();
-    fullScreen.innerText = "Enter Full Screen";
+    fullScreenIcon.classList = "fas fa-expand";
   } else {
     videoContainer.requestFullscreen();
-    fullScreen.innerText = "Exit Full Screen";
+    fullScreenIcon.classList = "fas fa-compress";
   }
 };
 
+var hideControls = function hideControls() {
+  return videoControls.classList.remove("showing");
+};
+
 var handleMouseMove = function handleMouseMove() {
+  if (controlsTimeout) {
+    clearTimeout(controlsTimeout);
+    controlsTimeout = null;
+  }
+
+  if (constrolsMovementTimeout) {
+    clearTimeout(constrolsMovementTimeout);
+    constrolsMovementTimeout = null;
+  }
+
   videoControls.classList.add("showing");
+  constrolsMovementTimeout = setTimeout(hideControls, 1000);
 };
 
 var handleMouseLeave = function handleMouseLeave() {
-  setTimeout(function () {
-    videoControls.classList.remove("showing");
-  }, 3000);
+  controlsTimeout = setTimeout(hideControls, 1000);
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -104,5 +121,5 @@ video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimeLineChange);
 fullScreen.addEventListener("click", handleFullScreen);
-video.addEventListener("mousemove", handleMouseMove);
+video.addEventListener("mouseenter", handleMouseMove);
 video.addEventListener("mouseleave", handleMouseLeave);

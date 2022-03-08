@@ -1,6 +1,8 @@
 const video = document.querySelector("video")
 const playBtn = document.getElementById("play")
+const playBtnIcon = playBtn.querySelector("i")
 const muteBtn = document.getElementById("mute")
+const muteBtnIcon = muteBtn.querySelector("i")
 const totalTime = document.getElementById("totalTime")
 const currenTime = document.getElementById("currenTime")
 const volumeRange = document.getElementById("volume")
@@ -9,7 +11,9 @@ const fullScreen = document.getElementById("fullScreen")
 const videoContainer = document.getElementById("videoContainer")
 const videoControls = document.getElementById("videoControls")
 
-let volumeValue = 0.5
+let controlsTimeout = null
+let constrolsMovementTimeout = null
+let volumeValue = 0.01
 video.volume = volumeValue
 
 const handlePlayClick = (e) => {
@@ -18,7 +22,7 @@ const handlePlayClick = (e) => {
   } else {
     video.pause()
   }
-  video.paused ? "Play" : "Pause"
+  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause"
 }
 
 const handlePause = () => (playBtn.innerText = "Play");
@@ -30,7 +34,9 @@ const handleMute = (e) => {
   } else {
     video.muted = true
   }
-  muteBtn.innerText = video.muted ? "소리 켜기" : "소리 끄기"
+  muteBtnIcon.classList = video.muted
+    ? "fas fa-volume-mute"
+    : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue
 }
 
@@ -70,21 +76,31 @@ const handleFullScreen = () => {
   const fullscreen = document.fullscreenElement
   if (fullscreen) {
     document.exitFullscreen()
-    fullScreen.innerText = "Enter Full Screen"
+    fullScreenIcon.classList = "fas fa-expand";
   } else {
     videoContainer.requestFullscreen()
-    fullScreen.innerText = "Exit Full Screen"
+    fullScreenIcon.classList = "fas fa-compress";
   }
 }
 
+const hideControls = () => videoControls.classList.remove("showing")
+
 const handleMouseMove = () => {
+  if (controlsTimeout) {
+    clearTimeout(controlsTimeout)
+    controlsTimeout = null
+  }
+  if (constrolsMovementTimeout) {
+    clearTimeout(constrolsMovementTimeout)
+    constrolsMovementTimeout = null
+  }
   videoControls.classList.add("showing")
+  constrolsMovementTimeout = setTimeout(hideControls, 1000)
 }
 
 const handleMouseLeave = () => {
-  setTimeout(() => {
-    videoControls.classList.remove("showing")
-  }, 3000)
+  controlsTimeout = setTimeout(hideControls, 1000)
+  
 }
 
 playBtn.addEventListener("click", handlePlayClick)
@@ -96,5 +112,5 @@ video.addEventListener("loadedmetadata", handleLoadedMetadata)
 video.addEventListener("timeupdate", handleTimeUpdate)
 timeline.addEventListener("input", handleTimeLineChange)
 fullScreen.addEventListener("click" , handleFullScreen)
-video.addEventListener("mousemove", handleMouseMove)
+video.addEventListener("mouseenter", handleMouseMove)
 video.addEventListener("mouseleave", handleMouseLeave)
