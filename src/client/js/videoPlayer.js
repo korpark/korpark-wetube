@@ -1,19 +1,22 @@
 const video = document.querySelector("video")
+const videoController = document.getElementById("videoController")
 const playBtn = document.getElementById("play")
 const playBtnIcon = playBtn.querySelector("i")
 const muteBtn = document.getElementById("mute")
-const muteBtnIcon = muteBtn.querySelector("i")
+const muteIcon = muteBtn.querySelector("i")
 const totalTime = document.getElementById("totalTime")
-const currenTime = document.getElementById("currenTime")
+const currentTime = document.getElementById("currentTime")
 const volumeRange = document.getElementById("volume")
 const timeline = document.getElementById("timeline")
-const fullScreen = document.getElementById("fullScreen")
+const fullScreenBtn = document.getElementById("fullScreen")
+const fullScreenIcon = fullScreenBtn.querySelector("i")
 const videoContainer = document.getElementById("videoContainer")
-const videoControls = document.getElementById("videoControls")
+const videoplayer = document.getElementById("videoplayer")
+
 
 let controlsTimeout = null
 let constrolsMovementTimeout = null
-let volumeValue = 0.01
+let volumeValue = 1
 video.volume = volumeValue
 
 const handlePlayClick = (e) => {
@@ -30,11 +33,12 @@ const handlePlay = () => (playBtn.innerText = "Pause");
 
 const handleMute = (e) => {
   if (video.muted) {
+    muteIcon.classList = "fas fa-volume-mute"
     video.muted = false
   } else {
     video.muted = true
   }
-  muteBtnIcon.classList = video.muted
+  muteIcon.classList = video.muted
     ? "fas fa-volume-mute"
     : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue
@@ -46,7 +50,7 @@ const handleVolumeChange = (event) => {
   } = event
   if (video.muted) {
     video.muted = false
-    muteBtn.innerText = "소리 끄기"
+    muteBtn.innerText = "fas fa-volume-mute"
   }
   volumeValue = value
   video.volume = value
@@ -61,7 +65,7 @@ const handleLoadedMetadata = () => {
 }
 
 const handleTimeUpdate = () => {
-  currenTime.innerText = formatTime(Math.floor(video.currentTime))
+  currentTime.innerText = formatTime(Math.floor(video.currentTime))
   timeline.value = Math.floor(video.currentTime)
 }
 
@@ -76,14 +80,14 @@ const handleFullScreen = () => {
   const fullscreen = document.fullscreenElement
   if (fullscreen) {
     document.exitFullscreen()
-    fullScreenIcon.classList = "fas fa-expand";
+    fullScreenIcon.classList = "fas fa-expand"
   } else {
     videoContainer.requestFullscreen()
-    fullScreenIcon.classList = "fas fa-compress";
+    fullScreenIcon.classList = "fas fa-compress"
   }
 }
 
-const hideControls = () => videoControls.classList.remove("showing")
+const hideControls = () => videoController.classList.remove("showing")
 
 const handleMouseMove = () => {
   if (controlsTimeout) {
@@ -94,12 +98,12 @@ const handleMouseMove = () => {
     clearTimeout(constrolsMovementTimeout)
     constrolsMovementTimeout = null
   }
-  videoControls.classList.add("showing")
-  constrolsMovementTimeout = setTimeout(hideControls, 1000)
+  videoController.classList.add("showing")
+  constrolsMovementTimeout = setTimeout(hideControls, 5000)
 }
 
 const handleMouseLeave = () => {
-  controlsTimeout = setTimeout(hideControls, 1000)
+  controlsTimeout = setTimeout(hideControls, 5000)
   
 }
 

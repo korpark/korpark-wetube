@@ -1,20 +1,22 @@
 "use strict";
 
 var video = document.querySelector("video");
+var videoController = document.getElementById("videoController");
 var playBtn = document.getElementById("play");
 var playBtnIcon = playBtn.querySelector("i");
 var muteBtn = document.getElementById("mute");
-var muteBtnIcon = muteBtn.querySelector("i");
+var muteIcon = muteBtn.querySelector("i");
 var totalTime = document.getElementById("totalTime");
-var currenTime = document.getElementById("currenTime");
+var currentTime = document.getElementById("currentTime");
 var volumeRange = document.getElementById("volume");
 var timeline = document.getElementById("timeline");
-var fullScreen = document.getElementById("fullScreen");
+var fullScreenBtn = document.getElementById("fullScreen");
+var fullScreenIcon = fullScreenBtn.querySelector("i");
 var videoContainer = document.getElementById("videoContainer");
-var videoControls = document.getElementById("videoControls");
+var videoplayer = document.getElementById("videoplayer");
 var controlsTimeout = null;
 var constrolsMovementTimeout = null;
-var volumeValue = 0.01;
+var volumeValue = 1;
 video.volume = volumeValue;
 
 var handlePlayClick = function handlePlayClick(e) {
@@ -37,12 +39,13 @@ var handlePlay = function handlePlay() {
 
 var handleMute = function handleMute(e) {
   if (video.muted) {
+    muteIcon.classList = "fas fa-volume-mute";
     video.muted = false;
   } else {
     video.muted = true;
   }
 
-  muteBtnIcon.classList = video.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
+  muteIcon.classList = video.muted ? "fas fa-volume-mute" : "fas fa-volume-up";
   volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
@@ -51,7 +54,7 @@ var handleVolumeChange = function handleVolumeChange(event) {
 
   if (video.muted) {
     video.muted = false;
-    muteBtn.innerText = "소리 끄기";
+    muteBtn.innerText = "fas fa-volume-mute";
   }
 
   volumeValue = value;
@@ -68,7 +71,7 @@ var handleLoadedMetadata = function handleLoadedMetadata() {
 };
 
 var handleTimeUpdate = function handleTimeUpdate() {
-  currenTime.innerText = formatTime(Math.floor(video.currentTime));
+  currentTime.innerText = formatTime(Math.floor(video.currentTime));
   timeline.value = Math.floor(video.currentTime);
 };
 
@@ -90,7 +93,7 @@ var handleFullScreen = function handleFullScreen() {
 };
 
 var hideControls = function hideControls() {
-  return videoControls.classList.remove("showing");
+  return videoController.classList.remove("showing");
 };
 
 var handleMouseMove = function handleMouseMove() {
@@ -104,12 +107,12 @@ var handleMouseMove = function handleMouseMove() {
     constrolsMovementTimeout = null;
   }
 
-  videoControls.classList.add("showing");
-  constrolsMovementTimeout = setTimeout(hideControls, 1000);
+  videoController.classList.add("showing");
+  constrolsMovementTimeout = setTimeout(hideControls, 5000);
 };
 
 var handleMouseLeave = function handleMouseLeave() {
-  controlsTimeout = setTimeout(hideControls, 1000);
+  controlsTimeout = setTimeout(hideControls, 5000);
 };
 
 playBtn.addEventListener("click", handlePlayClick);

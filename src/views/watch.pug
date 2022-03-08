@@ -4,33 +4,40 @@ extends base.pug
 block content
   div#videoContainer
     video(src="/" + video.fileUrl)
-    div#videoControls.videoControls
+    div#videoController.videoControls
         div.videoControls__play
           span#play.videoControls__playBtn
-            i.fas.fa-play
-          div.videoControls__time
-                span#currenTime 00:00
-                span /
-                span#totalTime 00:00
-          input(type="range", step="0.01", value=0, min="0", max=170)#timeline.videoControls__timeline
-          div.videoControls__volume
-                  input(type="range",step="0.1", value=0.5, min="0", max="1")#volume
-                  span#mute
-                      i.fas.fa-volume-up
-          div
+            i.fas.fa-play.fa-lg
+        div.videoControls__time
+            span#currentTime 00:00
+            span  / 
+            span#totalTime 00:00
+            input(type="range", value=0 min="0", step="1")#timeline.videoControls__timeline
+        div.videoControls__volume
+            input(type="range", value=0.1 min="0", max="1", step="0.1")#volume
+            span#mute
+              i.fas.fa-volume-up      
+        div 
             span#fullScreen
               i.fas.fa-expand
-        
-  div.video__data
-    p.video__title=video.title
-    small.video__owner Uploaded by  
-      a(href=`/users/${video.owner._id}`)=video.owner.name
-      hr
-    if String(video.owner._id) === String(loggedInUser._id)
-      a(href=`${video.id}/edit`) Edit Video &rarr;
-      br
-      a(href=`${video.id}/delete`) Delete Video &rarr;
-
+              
+  div#videoInfo
+      div.videoInfo-info
+          p#hashtags=video.hashtags
+          h1#title=video.title
+          small#createdAt=video.createdAt
+          hr
+          div.videoInfo-info-sub
+              div.videoInfo-info__upload
+                  small Uploaded by 
+                      a(href=`/users/${video.owner._id}`) #{video.owner.name}
+                  p#description=video.description
+              div.videoInfo-logged
+                  if String(video.owner._id) === String(loggedInUser._id)
+                      a(href=`${video.id}/edit`) Edit
+                      br
+                      a(href=`${video.id}/delete`) Delete
+          
 
 block scripts
   script(src="/static/js/videoPlayer.js")
