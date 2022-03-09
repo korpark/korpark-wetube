@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deleteComment = exports.createComment = exports.registerView = exports.search = exports.deleteVideo = exports.postUpload = exports.getUpload = exports.postEdit = exports.getEdit = exports.watch = exports.home = void 0;
+exports.createComment = exports.registerView = exports.search = exports.deleteVideo = exports.postUpload = exports.getUpload = exports.postEdit = exports.getEdit = exports.watch = exports.home = void 0;
 
 var _Video = _interopRequireDefault(require("../models/Video"));
 
@@ -380,108 +380,9 @@ var registerView = function registerView(req, res) {
 exports.registerView = registerView;
 
 var createComment = function createComment(req, res) {
-  var user, text, id, video, commentUser, comment;
-  return regeneratorRuntime.async(function createComment$(_context9) {
-    while (1) {
-      switch (_context9.prev = _context9.next) {
-        case 0:
-          user = req.session.user, text = req.body.text, id = req.params.id;
-          _context9.next = 3;
-          return regeneratorRuntime.awrap(_Video["default"].findById(id));
-
-        case 3:
-          video = _context9.sent;
-
-          if (video) {
-            _context9.next = 6;
-            break;
-          }
-
-          return _context9.abrupt("return", res.sendStatus(404));
-
-        case 6:
-          _context9.next = 8;
-          return regeneratorRuntime.awrap(_User["default"].findById(user._id));
-
-        case 8:
-          commentUser = _context9.sent;
-          _context9.next = 11;
-          return regeneratorRuntime.awrap(_Comment["default"].create({
-            text: text,
-            owner: user._id,
-            video: id
-          }));
-
-        case 11:
-          comment = _context9.sent;
-          video.comment.push(comment._id);
-          commentUser.comment.push(comment._id);
-          commentUser.save();
-          video.save();
-          req.session.user = commentUser;
-          return _context9.abrupt("return", res.sendStatus(201).json({
-            newCommentId: comment._id
-          }));
-
-        case 18:
-        case "end":
-          return _context9.stop();
-      }
-    }
-  });
+  console.log(req.params);
+  console.log(req.body);
+  return res.end();
 };
 
 exports.createComment = createComment;
-
-var deleteComment = function deleteComment(req, res) {
-  var id, videoId, user, video, commentUser;
-  return regeneratorRuntime.async(function deleteComment$(_context10) {
-    while (1) {
-      switch (_context10.prev = _context10.next) {
-        case 0:
-          id = req.params.id, videoId = req.body.videoId, user = req.session.user;
-          _context10.next = 3;
-          return regeneratorRuntime.awrap(_Video["default"].findById(videoId));
-
-        case 3:
-          video = _context10.sent;
-          _context10.next = 6;
-          return regeneratorRuntime.awrap(_User["default"].findById(user._id));
-
-        case 6:
-          commentUser = _context10.sent;
-
-          if (!(user.comment.indexOf(id) < 0)) {
-            _context10.next = 10;
-            break;
-          }
-
-          req.flash("info", "Not authorized");
-          return _context10.abrupt("return", res.sendStatus(403));
-
-        case 10:
-          commentUser.comment.splice(commentUser.comment.indexOf(id), 1);
-          video.comment.splice(video.comment.indexOf(id), 1);
-          _context10.next = 14;
-          return regeneratorRuntime.awrap(video.save());
-
-        case 14:
-          _context10.next = 16;
-          return regeneratorRuntime.awrap(commentUser.save());
-
-        case 16:
-          _context10.next = 18;
-          return regeneratorRuntime.awrap(_Comment["default"].findByIdAndDelete(id));
-
-        case 18:
-          return _context10.abrupt("return", res.sendStatus(201));
-
-        case 19:
-        case "end":
-          return _context10.stop();
-      }
-    }
-  });
-};
-
-exports.deleteComment = deleteComment;

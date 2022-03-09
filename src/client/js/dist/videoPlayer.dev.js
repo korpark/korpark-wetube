@@ -16,7 +16,7 @@ var videoContainer = document.getElementById("videoContainer");
 var videoplayer = document.getElementById("videoplayer");
 var controlsTimeout = null;
 var constrolsMovementTimeout = null;
-var volumeValue = 1;
+var volumeValue = 0.1;
 video.volume = volumeValue;
 
 var handlePlayClick = function handlePlayClick(e) {
@@ -30,11 +30,11 @@ var handlePlayClick = function handlePlayClick(e) {
 };
 
 var handlePause = function handlePause() {
-  return playBtn.innerText = "Play";
+  return playBtnIcon.classList = "fas fa-play";
 };
 
 var handlePlay = function handlePlay() {
-  return playBtn.innerText = "Pause";
+  return playBtnIcon.classList = "fas fa-pause";
 };
 
 var handleMute = function handleMute(e) {
@@ -108,11 +108,18 @@ var handleMouseMove = function handleMouseMove() {
   }
 
   videoController.classList.add("showing");
-  constrolsMovementTimeout = setTimeout(hideControls, 5000);
+  constrolsMovementTimeout = setTimeout(hideControls, 2000);
 };
 
 var handleMouseLeave = function handleMouseLeave() {
-  controlsTimeout = setTimeout(hideControls, 5000);
+  controlsTimeout = setTimeout(hideControls, 2000);
+};
+
+var handleEnded = function handleEnded() {
+  var id = videoContainer.dataset.id;
+  fetch("/api/videos/".concat(id, "/view"), {
+    method: "POST"
+  });
 };
 
 playBtn.addEventListener("click", handlePlayClick);
@@ -126,3 +133,4 @@ timeline.addEventListener("input", handleTimeLineChange);
 fullScreen.addEventListener("click", handleFullScreen);
 video.addEventListener("mouseenter", handleMouseMove);
 video.addEventListener("mouseleave", handleMouseLeave);
+video.addEventListener("ended", handleEnded);

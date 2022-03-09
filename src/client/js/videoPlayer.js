@@ -16,7 +16,7 @@ const videoplayer = document.getElementById("videoplayer")
 
 let controlsTimeout = null
 let constrolsMovementTimeout = null
-let volumeValue = 1
+let volumeValue = 0.1
 video.volume = volumeValue
 
 const handlePlayClick = (e) => {
@@ -28,8 +28,8 @@ const handlePlayClick = (e) => {
   playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause"
 }
 
-const handlePause = () => (playBtn.innerText = "Play");
-const handlePlay = () => (playBtn.innerText = "Pause");
+const handlePause = () => (playBtnIcon.classList = "fas fa-play");
+const handlePlay = () => (playBtnIcon.classList = "fas fa-pause");
 
 const handleMute = (e) => {
   if (video.muted) {
@@ -99,12 +99,19 @@ const handleMouseMove = () => {
     constrolsMovementTimeout = null
   }
   videoController.classList.add("showing")
-  constrolsMovementTimeout = setTimeout(hideControls, 5000)
+  constrolsMovementTimeout = setTimeout(hideControls, 2000)
 }
 
 const handleMouseLeave = () => {
-  controlsTimeout = setTimeout(hideControls, 5000)
+  controlsTimeout = setTimeout(hideControls, 2000)
   
+}
+
+const handleEnded = () => {
+  const { id } = videoContainer.dataset
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  })
 }
 
 playBtn.addEventListener("click", handlePlayClick)
@@ -118,3 +125,4 @@ timeline.addEventListener("input", handleTimeLineChange)
 fullScreen.addEventListener("click" , handleFullScreen)
 video.addEventListener("mouseenter", handleMouseMove)
 video.addEventListener("mouseleave", handleMouseLeave)
+video.addEventListener("ended", handleEnded)

@@ -122,57 +122,18 @@ export const search = async (req, res) => {
 };
 
 export const registerView = async (req, res) => {
-  const { id } = req.params;
-  const video = await Video.findById(id);
-  if (!video) {
-    return res.sendStatus(404);
-  }
-  video.meta.views = video.meta.views + 1;
-  await video.save();
-  return res.sendStatus(200);
-};
-
-export const createComment = async (req, res) => {
-  const {
-    session: { user },
-    body: { text },
-    params: { id }
-  } = req
-
+  const { id } = req.params
   const video = await Video.findById(id)
   if (!video) {
     return res.sendStatus(404)
   }
-  const commentUser = await User.findById(user._id);
-  const comment = await Comment.create({
-    text,
-    owner: user._id,
-    video: id,
-  })
-  video.comment.push(comment._id)
-  commentUser.comment.push(comment._id);
-  commentUser.save();
-  video.save()
-  req.session.user = commentUser; 
-  return res.sendStatus(201).json({newCommentId:comment._id})
-}
+  video.meta.views = video.meta.views + 1
+  await video.save()
+  return res.sendStatus(200)
+};
 
-export const deleteComment = async (req, res) => {
-  const {
-    params: { id },
-    body: { videoId },
-    session: { user }
-  } = req
-  const video = await Video.findById(videoId);
-  const commentUser = await User.findById(user._id);
-  if(user.comment.indexOf(id) < 0) {
-    req.flash("info", "Not authorized");
-    return res.sendStatus(403);
-  }
-  commentUser.comment.splice(commentUser.comment.indexOf(id), 1);
-  video.comment.splice(video.comment.indexOf(id), 1);
-  await video.save();
-  await commentUser.save();   
-  await Comment.findByIdAndDelete(id);
-  return res.sendStatus(201);
+export const createComment = (req, res) => {
+  console.log(req.params)
+  console.log(req.body)
+  return res.end()
 }

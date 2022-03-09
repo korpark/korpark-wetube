@@ -2,12 +2,12 @@ extends base.pug
 
 
 block content
-  div#videoContainer
+  div#videoContainer(data-id=video._id)
     video(src="/" + video.fileUrl)
     div#videoController.videoControls
         div.videoControls__play
           span#play.videoControls__playBtn
-            i.fas.fa-play.fa-lg
+            i.fas.fa-play
         div.videoControls__time
             span#currentTime 00:00
             span  / 
@@ -21,23 +21,29 @@ block content
             span#fullScreen
               i.fas.fa-expand
               
-  div#videoInfo
-      div.videoInfo-info
-          p#hashtags=video.hashtags
-          h1#title=video.title
-          small#createdAt=video.createdAt
-          hr
-          div.videoInfo-info-sub
-              div.videoInfo-info__upload
-                  small Uploaded by 
-                      a(href=`/users/${video.owner._id}`) #{video.owner.name}
-                  p#description=video.description
-              div.videoInfo-logged
-                  if String(video.owner._id) === String(loggedInUser._id)
-                      a(href=`${video.id}/edit`) Edit
-                      br
-                      a(href=`${video.id}/delete`) Delete
+  div.video__data
+    h1.video__title=video.title
+    p#hashtags=video.hashtags
+    small.video__createdAt=video.createdAT.toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+    hr
+    small.video__owner Uploaded by 
+        a(href=`/users/${video.owner._id}`) #{video.owner.name}
+    p#description=video.description
+  div.videoInfo-logged
+    if String(video.owner._id) === String(loggedInUser._id)
+        a(href=`${video.id}/edit`) Edit
+        br
+        a(href=`${video.id}/delete`) Delete
+  if loggedIn
+    div.video__comments 
+      form.video__comment-form#commentForm
+        textarea(cols="30", rows="10", placeholder="댓글을 달자")
+        button Add Comment
+
+    
           
 
 block scripts
   script(src="/static/js/videoPlayer.js")
+  if loggedIn
+    script(src="/static/js/commentSections.js")
