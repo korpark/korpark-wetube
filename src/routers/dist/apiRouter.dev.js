@@ -15,5 +15,6 @@ var apiRouter = _express["default"].Router();
 
 apiRouter.post("/videos/:id([0-9a-f]{24})/view", _videoController.registerView);
 apiRouter.post("/videos/:id([0-9a-f]{24})/comment", _videoController.createComment);
+apiRouter["delete"]("/videos/:id([0-9a-f]{24})/comment", _videoController.deleteComment);
 var _default = apiRouter;
 exports["default"] = _default;

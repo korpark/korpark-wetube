@@ -2,6 +2,8 @@
 
 var videoContainer = document.getElementById("videoContainer");
 var form = document.getElementById("commentForm");
+var commentDelete = document.getElementById("commentDelete");
+var videoComment = document.getElementById("videoComment");
 
 var addComment = function addComment(text, id) {
   var videoComments = document.querySelector(".video__comments ul");
@@ -78,6 +80,35 @@ var handleSubmit = function handleSubmit(event) {
   });
 };
 
+var handleDelete = function handleDelete(event) {
+  var li, id;
+  return regeneratorRuntime.async(function handleDelete$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          li = event.target.parentElement;
+          id = li.dataset.id;
+          fetch("/api/videos/".concat(id, "/comment"), {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              id: id
+            })
+          });
+          li.remove();
+
+        case 4:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  });
+};
+
 if (form) {
   form.addEventListener("submit", handleSubmit);
 }
+
+commentDelete.addEventListener("click", handleDelete);

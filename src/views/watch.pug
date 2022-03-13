@@ -44,11 +44,11 @@ block content
       ul
           if loggedIn
           each comment in video.comments.reverse()
-            li.video__comment(data-id=comment.id)
+            li#videoComment.video__comment(data-id=comment.id)
               i.fas.fa-comment
               span #{comment.text}
               if (loggedInUser._id === String(comment.owner._id))
-                span ❌
+                span#commentDelete(data-id=comment.id).video__comment-delete ❌
 
 
 block scripts

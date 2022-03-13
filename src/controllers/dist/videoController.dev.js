@@ -3,13 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createComment = exports.registerView = exports.search = exports.deleteVideo = exports.postUpload = exports.getUpload = exports.postEdit = exports.getEdit = exports.watch = exports.home = void 0;
+exports.deleteComment = exports.createComment = exports.registerView = exports.search = exports.deleteVideo = exports.postUpload = exports.getUpload = exports.postEdit = exports.getEdit = exports.watch = exports.home = void 0;
 
 var _Video = _interopRequireDefault(require("../models/Video"));
 
 var _Comment = _interopRequireDefault(require("../models/Comment"));
 
 var _User = _interopRequireDefault(require("../models/User"));
+
+var _regeneratorRuntime = require("regenerator-runtime");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -421,3 +423,102 @@ var createComment = function createComment(req, res) {
 };
 
 exports.createComment = createComment;
+
+var deleteComment = function deleteComment(req, res) {
+  var id, userId, comment, ownerId, user, targetId, i, video, _i;
+
+  return regeneratorRuntime.async(function deleteComment$(_context10) {
+    while (1) {
+      switch (_context10.prev = _context10.next) {
+        case 0:
+          id = req.body.id;
+          userId = String(req.session.user._id);
+          _context10.next = 4;
+          return regeneratorRuntime.awrap(_Comment["default"].findById(id));
+
+        case 4:
+          comment = _context10.sent;
+          ownerId = String(comment.owner);
+
+          if (!(userId === ownerId)) {
+            _context10.next = 11;
+            break;
+          }
+
+          _context10.next = 9;
+          return regeneratorRuntime.awrap(_Comment["default"].deleteOne({
+            _id: id
+          }));
+
+        case 9:
+          _context10.next = 12;
+          break;
+
+        case 11:
+          return _context10.abrupt("return", res.sendStatus(403));
+
+        case 12:
+          _context10.next = 14;
+          return regeneratorRuntime.awrap(_User["default"].findById(userId));
+
+        case 14:
+          user = _context10.sent;
+
+          if (user) {
+            _context10.next = 17;
+            break;
+          }
+
+          return _context10.abrupt("return", res.sendStatus(404));
+
+        case 17:
+          targetId = null;
+
+          for (i = 0; i < user.comments.length; i++) {
+            if (String(user.comments[i]) === id) {
+              targetId = user.comments[i];
+            }
+          }
+
+          user.comments.splice(user.comments.indexOf(targetId), 1);
+          _context10.next = 22;
+          return regeneratorRuntime.awrap(user.save());
+
+        case 22:
+          _context10.next = 24;
+          return regeneratorRuntime.awrap(_Video["default"].findOne({
+            comments: id
+          }));
+
+        case 24:
+          video = _context10.sent;
+
+          if (video) {
+            _context10.next = 27;
+            break;
+          }
+
+          return _context10.abrupt("return", res.sendStatus(404));
+
+        case 27:
+          targetId = null;
+
+          for (_i = 0; _i < video.comments.length; _i++) {
+            if (String(video.comments[_i]) === id) {
+              targetId = video.comments[_i];
+            }
+          }
+
+          video.comments.splice(video.comments.indexOf(targetId), 1);
+          video.save();
+          return _context10.abrupt("return", res.sendStatus(200));
+
+        case 32:
+        case "end":
+          return _context10.stop();
+      }
+    }
+  });
+};
+
+exports.deleteComment = deleteComment;
