@@ -1,7 +1,7 @@
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 import User from "../models/User";
-import req from "express/lib/request";
+
 
 export const home = async (req, res) => {
   const videos = await Video.find({})

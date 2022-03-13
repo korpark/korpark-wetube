@@ -11,8 +11,6 @@ var _Comment = _interopRequireDefault(require("../models/Comment"));
 
 var _User = _interopRequireDefault(require("../models/User"));
 
-var _request = _interopRequireDefault(require("express/lib/request"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var home = function home(req, res) {
