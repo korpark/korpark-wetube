@@ -1,7 +1,7 @@
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 import User from "../models/User";
-import { async } from "regenerator-runtime";
+import req from "express/lib/request";
 
 export const home = async (req, res) => {
   const videos = await Video.find({})
@@ -151,44 +151,15 @@ export const createComment = async (req, res) => {
   })
   video.comments.push(comment._id)
   video.save()
-  console.log(video)
   return res.status(201).json({ newCommentId: comment._id });
 }
 
 export const deleteComment = async (req, res) => {
-  const { id } = req.body;
-  const userId = String(req.session.user._id);
-  const comment = await Comment.findById(id);
-  const ownerId = String(comment.owner);
-  if (userId === ownerId) {
-    await Comment.deleteOne({ _id: id });
+  const { id } = req.params;
+  const { owner } = await Comment.findById(id);
+  if (String(owner._id) === req.session.user._id) {
+    await Comment.findByIdAndDelete(id);
   } else {
-    return res.sendStatus(403);
+    req.sentStatus(404);
   }
-  const user = await User.findById(userId);
-  if (!user) {
-    return res.sendStatus(404);
-  }
-  let targetId = null;
-  for (let i = 0; i < user.comments.length; i++) {
-    if (String(user.comments[i]) === id) {
-      targetId = user.comments[i];
-    }
-  }
-  user.comments.splice(user.comments.indexOf(targetId), 1);
-  await user.save();
-  const video = await Video.findOne({ comments: id });
-  if (!video) {
-    return res.sendStatus(404);
-  }
-  targetId = null;
-  for (let i = 0; i < video.comments.length; i++) {
-    if (String(video.comments[i]) === id) {
-      targetId = video.comments[i];
-    }
-  }
-  video.comments.splice(video.comments.indexOf(targetId), 1);
-  video.save();
-  return res.sendStatus(200);
-
 };

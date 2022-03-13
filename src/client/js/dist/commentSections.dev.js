@@ -19,7 +19,7 @@ var addComment = function addComment(text, id) {
   newComment.appendChild(icon);
   newComment.appendChild(span);
   newComment.appendChild(span2);
-  videoComments.appendChild(newComment);
+  videoComments.prepend(newComment);
 };
 
 var handleSubmit = function handleSubmit(event) {
@@ -56,23 +56,22 @@ var handleSubmit = function handleSubmit(event) {
         case 8:
           response = _context.sent;
           textarea.value = "";
-          window.location.reload();
 
           if (!(response.status === 201)) {
-            _context.next = 18;
+            _context.next = 17;
             break;
           }
 
           textarea.value = "";
-          _context.next = 15;
+          _context.next = 14;
           return regeneratorRuntime.awrap(response.json());
 
-        case 15:
+        case 14:
           _ref = _context.sent;
           newCommentId = _ref.newCommentId;
           addComment(text, newCommentId);
 
-        case 18:
+        case 17:
         case "end":
           return _context.stop();
       }

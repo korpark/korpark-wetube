@@ -17,7 +17,7 @@ const addComment = (text, id) => {
  newComment.appendChild(icon)
  newComment.appendChild(span)
  newComment.appendChild(span2);
- videoComments.appendChild(newComment)
+ videoComments.prepend(newComment)
 }
 
 
@@ -37,7 +37,6 @@ const handleSubmit = async (event) => {
     body: JSON.stringify({ text }),
   })
   textarea.value = ""
-  window.location.reload()
   if (response.status === 201) {
     textarea.value = "";
     const { newCommentId } = await response.json();
