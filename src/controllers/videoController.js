@@ -132,8 +132,25 @@ export const registerView = async (req, res) => {
   return res.sendStatus(200)
 };
 
-export const createComment = (req, res) => {
-  console.log(req.params)
-  console.log(req.body)
-  return res.end()
+export const createComment = async (req, res) => {
+  const {
+    session : {user},
+    body : {text},
+    params : {id}
+  } = req
+
+  const video = await Video.findById(id)
+  if (!video) {
+    res.sendStatus(404)
+  }
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    video: id
+  })
+  video.comments.push(comment._id)
+  video.save()
+  console.log(video)
+  return res.status(201).json({ newCommentId: comment._id });
+
 }

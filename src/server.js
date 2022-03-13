@@ -20,6 +20,7 @@ app.use(logger)
 // urlencoded가 route에 들어가기 전에 form을 javascript 형식을 쓸 수 있게 만든다
 // req.body (x)
 app.use(express.urlencoded({extended : true}))
+
 // req.body (o)
 app.use(express.json())
 app.use(

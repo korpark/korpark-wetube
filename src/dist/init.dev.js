@@ -16,7 +16,7 @@ require("./models/Comment");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var PORT = process.env.PORT || 44295;
+var PORT = process.env.PORT || 1242;
 
 var handleListening = function handleListening() {
   return console.log("Server listening on port http://localhost:".concat(PORT));

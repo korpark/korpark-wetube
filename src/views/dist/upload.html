@@ -1,0 +1,37 @@
+<!DOCTYPE html >
+<html lang="ko">
+  <head>
+    <title> | Wetube</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" href="/static/css/styles.css"/>
+  </head>
+  <body> 
+    <header><a class="header__logo" href="/"><i class="fab fa-youtube"></i></a>
+      <nav>
+        <ul>
+          <li><a href="/search"><i class="fas fa-search"></i></a></li>
+          <li><a href="/login"> Login</a></li>
+          <li><a class="header__btn" href="/join"> Join</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div class="upload__container">
+        <div class="upload__video">
+          <video id="preview"></video>
+          <button class="social__btn" id="actionBtn">Start Recording</button>
+        </div>
+      </div>
+      <form method="POST" enctype="multipart/form-data">
+        <label for="video">Video File</label>
+        <input type="file" accept="video/*" required="required" id="video" name="video"/>
+        <input name="title" placeholder="Title" required="required" type="text"/>
+        <input name="description" placeholder="Description" required="required" type="text"/>
+        <input name="hashtags" placeholder="hashtags, separated by comma" type="text"/>
+        <input value="Upload Video" type="submit"/>
+      </form>
+    </main>
+    <footer>&copy; 2022 창현이의 웹개발</footer>
+  </body>
+  <scripts src="/static/js/recorder.js"></scripts>
+</html>

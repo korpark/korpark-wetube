@@ -18,6 +18,7 @@
     }
   }
 }
+
 .video__comments {
   display: flex;
   flex-direction: column;
@@ -25,6 +26,8 @@
   width: 100%;
   margin: 0 auto;
   margin-top: 20px;
+  background-color: white;
+  color: black;
   .video__comment {
     padding: 10px;
     border-radius: 9999px;

@@ -35,13 +35,21 @@ block content
         br
         a(href=`${video.id}/delete`) Delete
   if loggedIn
-    div.video__comments 
+    div.video__add-comments 
       form.video__comment-form#commentForm
         textarea(cols="30", rows="10", placeholder="댓글을 달자")
         button Add Comment
+  
+  div.video__comments
+      ul
+          if loggedIn
+          each comment in video.comments.reverse()
+            li.video__comment(data-id=comment.id)
+              i.fas.fa-comment
+              span #{comment.text}
+              if (loggedInUser._id === String(comment.owner._id))
+                span ❌
 
-    
-          
 
 block scripts
   script(src="/static/js/videoPlayer.js")

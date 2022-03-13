@@ -16,7 +16,7 @@ var videoContainer = document.getElementById("videoContainer");
 var videoplayer = document.getElementById("videoplayer");
 var controlsTimeout = null;
 var constrolsMovementTimeout = null;
-var volumeValue = 0.1;
+var volumeValue = 0.03;
 video.volume = volumeValue;
 
 var handlePlayClick = function handlePlayClick(e) {

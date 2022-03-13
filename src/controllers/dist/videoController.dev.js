@@ -380,9 +380,44 @@ var registerView = function registerView(req, res) {
 exports.registerView = registerView;
 
 var createComment = function createComment(req, res) {
-  console.log(req.params);
-  console.log(req.body);
-  return res.end();
+  var user, text, id, video, comment;
+  return regeneratorRuntime.async(function createComment$(_context9) {
+    while (1) {
+      switch (_context9.prev = _context9.next) {
+        case 0:
+          user = req.session.user, text = req.body.text, id = req.params.id;
+          _context9.next = 3;
+          return regeneratorRuntime.awrap(_Video["default"].findById(id));
+
+        case 3:
+          video = _context9.sent;
+
+          if (!video) {
+            res.sendStatus(404);
+          }
+
+          _context9.next = 7;
+          return regeneratorRuntime.awrap(_Comment["default"].create({
+            text: text,
+            owner: user._id,
+            video: id
+          }));
+
+        case 7:
+          comment = _context9.sent;
+          video.comments.push(comment._id);
+          video.save();
+          console.log(video);
+          return _context9.abrupt("return", res.status(201).json({
+            newCommentId: comment._id
+          }));
+
+        case 12:
+        case "end":
+          return _context9.stop();
+      }
+    }
+  });
 };
 
 exports.createComment = createComment;

@@ -16,7 +16,7 @@ const videoplayer = document.getElementById("videoplayer")
 
 let controlsTimeout = null
 let constrolsMovementTimeout = null
-let volumeValue = 0.1
+let volumeValue = 0.03
 video.volume = volumeValue
 
 const handlePlayClick = (e) => {

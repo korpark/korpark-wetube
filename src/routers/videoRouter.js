@@ -21,6 +21,7 @@ videoRouter
   .route("/:id([0-9a-f]{24})/delete")
   .all(protectorMiddleware)
   .get(deleteVideo);
+
 videoRouter
   .route("/upload")
   .all(protectorMiddleware)
