@@ -3,3 +3,5 @@
 require("regenerator-runtime");
 
 require("../scss/styles.scss");
+
+require("../scss");

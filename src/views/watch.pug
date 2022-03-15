@@ -38,7 +38,8 @@ block content
     div.video__add-comments 
       form.video__comment-form#commentForm
         textarea(cols="30", rows="10", placeholder="댓글을 달자")
-        button Add Comment
+        if loggedIn
+          button Add Comment
   
   div.video__comments
       ul
