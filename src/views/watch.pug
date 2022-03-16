@@ -11,7 +11,7 @@ block content
         input(type="range", value=0 min="0", step="1")#timeline.videoControls__timeline
         div.videoControls__time
             span#currentTime 00:00
-            span /
+            span  / 
             span#totalTime 00:00
         div.videoControls__volume
             input(type="range", value=0.03 min="0", max="1", step="0.1")#volume
@@ -42,13 +42,12 @@ block content
   
   div.video__comments
       ul
-          if loggedIn
-          each comment in video.comments.reverse()
-            li#videoComment.video__comment(data-id=comment.id)
-              i.fas.fa-comment
-              span #{comment.text}
-              if (loggedInUser._id === String(comment.owner._id))
-                span#commentDelete(data-id=comment.id).video__comment-delete ❌
+        each comment in video.comments.reverse()
+          li#videoComment.video__comment(data-id=comment.id)
+            i.fas.fa-comment
+            span #{comment.text}
+            if (loggedInUser._id === String(comment.owner._id))
+              span#commentDelete(data-id=comment.id).video__comment-delete ❌
 
 
 block scripts
