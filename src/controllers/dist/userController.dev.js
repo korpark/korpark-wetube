@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.seeUserProfile = exports.postChangePassword = exports.getChangePassword = exports.postEdit = exports.getEdit = exports.logout = exports.postLogin = exports.getLogin = exports.postJoin = exports.getJoin = void 0;
+exports.FinishGithubLogin = exports.startGithubLogin = exports.seeUserProfile = exports.postChangePassword = exports.getChangePassword = exports.postEdit = exports.getEdit = exports.logout = exports.postLogin = exports.getLogin = exports.postJoin = exports.getJoin = void 0;
 
 var _User = _interopRequireDefault(require("../models/User"));
 
@@ -329,3 +329,86 @@ var seeUserProfile = function seeUserProfile(req, res) {
 };
 
 exports.seeUserProfile = seeUserProfile;
+
+var startGithubLogin = function startGithubLogin(req, res) {
+  var baseUrl = "https://github.com/login/oauth/authorize";
+  var config = {
+    client_id: process.env.GH_CLIENT,
+    allow_signup: false,
+    scope: "read:user user:email"
+  };
+  var params = new URLSearchParams(config).toString();
+  var finalUrl = "".concat(baseUrl, "?").concat(params);
+  return res.redirect(finalUrl);
+};
+
+exports.startGithubLogin = startGithubLogin;
+
+var FinishGithubLogin = function FinishGithubLogin(req, res) {
+  var baseUrl, config, params, finalUrl, tokenRequest, access_token, userRequest;
+  return regeneratorRuntime.async(function FinishGithubLogin$(_context6) {
+    while (1) {
+      switch (_context6.prev = _context6.next) {
+        case 0:
+          baseUrl = "https://github.com/login/oauth/access_token";
+          config = {
+            client_id: process.env.GH_CLIENT,
+            client_secret: process.env.GH_SECRET,
+            code: req.query.code
+          };
+          params = new URLSearchParams(config).toString();
+          finalUrl = "".concat(baseUrl, "?").concat(params);
+          _context6.t0 = regeneratorRuntime;
+          _context6.next = 7;
+          return regeneratorRuntime.awrap((0, _nodeFetch["default"])(finalUrl, {
+            method: "POST",
+            headers: {
+              Accept: "application/json"
+            }
+          }));
+
+        case 7:
+          _context6.t1 = _context6.sent.json();
+          _context6.next = 10;
+          return _context6.t0.awrap.call(_context6.t0, _context6.t1);
+
+        case 10:
+          tokenRequest = _context6.sent;
+
+          if (!("access_token" in tokenRequest)) {
+            _context6.next = 23;
+            break;
+          }
+
+          access_token = tokenRequest.access_token;
+          _context6.t2 = regeneratorRuntime;
+          _context6.next = 16;
+          return regeneratorRuntime.awrap((0, _nodeFetch["default"])("http://api.github.com/user", {
+            headers: {
+              Authorization: "token ".concat(access_token)
+            }
+          }));
+
+        case 16:
+          _context6.t3 = _context6.sent.json();
+          _context6.next = 19;
+          return _context6.t2.awrap.call(_context6.t2, _context6.t3);
+
+        case 19:
+          userRequest = _context6.sent;
+          console.log(userRequest);
+          _context6.next = 24;
+          break;
+
+        case 23:
+          return _context6.abrupt("return", res.end());
+
+        case 24:
+        case "end":
+          return _context6.stop();
+      }
+    }
+  });
+};
+
+exports.FinishGithubLogin = FinishGithubLogin;

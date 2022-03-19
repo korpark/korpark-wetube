@@ -6,6 +6,8 @@ import {
   seeUserProfile,
   getChangePassword,
   postChangePassword,
+  startGithubLogin,
+  FinishGithubLogin
 } from "../controllers/userController";
 import {
   protectorMiddleware,
@@ -26,6 +28,9 @@ userRouter
   .all(protectorMiddleware)
   .get(getChangePassword)
   .post(postChangePassword);
+
+userRouter.get("/github/start", startGithubLogin)
+userRouter.get("/github/finish", FinishGithubLogin)
 
 userRouter.get("/:id", seeUserProfile);
 
