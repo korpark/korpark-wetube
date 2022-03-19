@@ -180,16 +180,17 @@ var getEdit = function getEdit(req, res) {
 exports.getEdit = getEdit;
 
 var postEdit = function postEdit(req, res) {
-  var _req$session$user, _id, avatarUrl, _req$body3, name, email, username, location, file, updatedUser;
+  var _req$session$user, _id, avatarUrl, _req$body3, name, email, username, location, file, isHeroku, updatedUser;
 
   return regeneratorRuntime.async(function postEdit$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
           _req$session$user = req.session.user, _id = _req$session$user._id, avatarUrl = _req$session$user.avatarUrl, _req$body3 = req.body, name = _req$body3.name, email = _req$body3.email, username = _req$body3.username, location = _req$body3.location, file = req.file;
-          _context3.next = 3;
+          isHeroku = process.env.NODE_ENV === "production";
+          _context3.next = 4;
           return regeneratorRuntime.awrap(_User["default"].findByIdAndUpdate(_id, {
-            avatarUrl: file ? file.location : avatarUrl,
+            avatarUrl: file ? isHeroku ? file.location : file.path : avatarUrl,
             name: name,
             email: email,
             username: username,
@@ -198,12 +199,12 @@ var postEdit = function postEdit(req, res) {
             "new": true
           }));
 
-        case 3:
+        case 4:
           updatedUser = _context3.sent;
           req.session.user = updatedUser;
           return _context3.abrupt("return", res.redirect("/"));
 
-        case 6:
+        case 7:
         case "end":
           return _context3.stop();
       }
