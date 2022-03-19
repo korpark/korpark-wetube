@@ -152,7 +152,6 @@ export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
     client_id: process.env.GH_CLIENT,
-    allow_signup: false,
     scope: "read:user user:email",
   };
   const params = new URLSearchParams(config).toString();
@@ -186,7 +185,6 @@ export const FinishGithubLogin = async (req, res) => {
         }
       })
     ).json()
-    console.log(userRequest)
     } else {
       return res.end()
     }

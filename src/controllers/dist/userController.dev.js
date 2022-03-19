@@ -334,7 +334,6 @@ var startGithubLogin = function startGithubLogin(req, res) {
   var baseUrl = "https://github.com/login/oauth/authorize";
   var config = {
     client_id: process.env.GH_CLIENT,
-    allow_signup: false,
     scope: "read:user user:email"
   };
   var params = new URLSearchParams(config).toString();
@@ -376,7 +375,7 @@ var FinishGithubLogin = function FinishGithubLogin(req, res) {
           tokenRequest = _context6.sent;
 
           if (!("access_token" in tokenRequest)) {
-            _context6.next = 23;
+            _context6.next = 22;
             break;
           }
 
@@ -396,14 +395,13 @@ var FinishGithubLogin = function FinishGithubLogin(req, res) {
 
         case 19:
           userRequest = _context6.sent;
-          console.log(userRequest);
-          _context6.next = 24;
+          _context6.next = 23;
           break;
 
-        case 23:
+        case 22:
           return _context6.abrupt("return", res.end());
 
-        case 24:
+        case 23:
         case "end":
           return _context6.stop();
       }
