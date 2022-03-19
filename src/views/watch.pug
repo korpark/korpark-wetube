@@ -46,7 +46,7 @@ block content
           li#videoComment.video__comment(data-id=comment.id)
             i.fas.fa-comment
             span  #{comment.text}
-            span  • #{loggedInUser.username}
+            span  • #{comment.owner.username}
             if (loggedInUser._id === String(comment.owner._id))
               span#commentDelete(data-id=comment.id).video__comment-delete ❌
 
