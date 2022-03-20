@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.videoUpload = exports.avatarUpload = exports.publicOnlyMiddleware = exports.protectorMiddleware = exports.localsMiddleware = void 0;
+exports.s3DeleteAvatarMiddleware = exports.videoUpload = exports.avatarUpload = exports.publicOnlyMiddleware = exports.protectorMiddleware = exports.localsMiddleware = void 0;
 
 var _multer = _interopRequireDefault(require("multer"));
 
@@ -28,7 +28,8 @@ var s3ImageUploader = (0, _multerS["default"])({
 var s3VideoUploader = (0, _multerS["default"])({
   s3: s3,
   bucket: 'korwetube/videos',
-  acl: 'public-read'
+  acl: 'public-read',
+  contentType: _multerS["default"].AUTO_CONTENT_TYPE
 });
 
 var localsMiddleware = function localsMiddleware(req, res, next) {
@@ -78,3 +79,23 @@ var videoUpload = (0, _multer["default"])({
   storage: isHeroku ? s3VideoUploader : undefined
 });
 exports.videoUpload = videoUpload;
+
+var s3DeleteAvatarMiddleware = function s3DeleteAvatarMiddleware(req, res, next) {
+  if (!req.file) {
+    return next();
+  }
+
+  s3.deleteObject({
+    Bucket: "clonetubetest",
+    Key: "images/".concat(req.session.user.avatarURL.split('/')[4])
+  }, function (err, data) {
+    if (err) {
+      throw err;
+    }
+
+    console.log("s3 deleteObject", data);
+  });
+  next();
+};
+
+exports.s3DeleteAvatarMiddleware = s3DeleteAvatarMiddleware;
