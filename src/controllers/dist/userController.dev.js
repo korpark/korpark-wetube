@@ -344,7 +344,7 @@ var startGithubLogin = function startGithubLogin(req, res) {
 exports.startGithubLogin = startGithubLogin;
 
 var FinishGithubLogin = function FinishGithubLogin(req, res) {
-  var baseUrl, config, params, finalUrl, tokenRequest, access_token, userRequest;
+  var baseUrl, config, params, finalUrl, tokenRequest, access_token, apiURL, userData, emailData, emailObj, existingUser, user;
   return regeneratorRuntime.async(function FinishGithubLogin$(_context6) {
     while (1) {
       switch (_context6.prev = _context6.next) {
@@ -375,33 +375,96 @@ var FinishGithubLogin = function FinishGithubLogin(req, res) {
           tokenRequest = _context6.sent;
 
           if (!("access_token" in tokenRequest)) {
-            _context6.next = 22;
+            _context6.next = 48;
             break;
           }
 
           access_token = tokenRequest.access_token;
+          apiURL = "http://api.github.com";
           _context6.t2 = regeneratorRuntime;
-          _context6.next = 16;
-          return regeneratorRuntime.awrap((0, _nodeFetch["default"])("http://api.github.com/user", {
+          _context6.next = 17;
+          return regeneratorRuntime.awrap((0, _nodeFetch["default"])("".concat(apiURL, "/user"), {
             headers: {
               Authorization: "token ".concat(access_token)
             }
           }));
 
-        case 16:
+        case 17:
           _context6.t3 = _context6.sent.json();
-          _context6.next = 19;
+          _context6.next = 20;
           return _context6.t2.awrap.call(_context6.t2, _context6.t3);
 
-        case 19:
-          userRequest = _context6.sent;
-          _context6.next = 23;
+        case 20:
+          userData = _context6.sent;
+          _context6.t4 = regeneratorRuntime;
+          _context6.next = 24;
+          return regeneratorRuntime.awrap((0, _nodeFetch["default"])("".concat(apiURL, "/user/emails"), {
+            headers: {
+              Authorization: "token ".concat(access_token)
+            }
+          }));
+
+        case 24:
+          _context6.t5 = _context6.sent.json();
+          _context6.next = 27;
+          return _context6.t4.awrap.call(_context6.t4, _context6.t5);
+
+        case 27:
+          emailData = _context6.sent;
+          emailObj = emailData.find(function (email) {
+            return email.primary === true && email.verified === true;
+          });
+
+          if (emailObj) {
+            _context6.next = 31;
+            break;
+          }
+
+          return _context6.abrupt("return", res.redirect("/login"));
+
+        case 31:
+          _context6.next = 33;
+          return regeneratorRuntime.awrap(_User["default"].findOne({
+            email: emailObj.email
+          }));
+
+        case 33:
+          existingUser = _context6.sent;
+
+          if (!existingUser) {
+            _context6.next = 40;
+            break;
+          }
+
+          req.session.loggedIn = true;
+          req.session.user = existingUser;
+          return _context6.abrupt("return", res.redirect("/"));
+
+        case 40:
+          _context6.next = 42;
+          return regeneratorRuntime.awrap(_User["default"].create({
+            name: userData.name,
+            email: emailObj.email,
+            username: userData.login,
+            location: userData.location,
+            password: "",
+            socialOnly: true
+          }));
+
+        case 42:
+          user = _context6.sent;
+          req.session.loggedIn = true;
+          req.session.user = user;
+          return _context6.abrupt("return", res.redirect("/"));
+
+        case 46:
+          _context6.next = 49;
           break;
 
-        case 22:
-          return _context6.abrupt("return", res.end());
+        case 48:
+          return _context6.abrupt("return", res.redirect("/"));
 
-        case 23:
+        case 49:
         case "end":
           return _context6.stop();
       }
