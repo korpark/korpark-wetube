@@ -201,14 +201,14 @@ var getUpload = function getUpload(req, res) {
 exports.getUpload = getUpload;
 
 var postUpload = function postUpload(req, res) {
-  var _id, _req$files, video, thumb, _req$body2, title, description, hashtags, isHeroku, newVideo, user;
+  var _id, video, _req$body2, title, description, hashtags, isHeroku, newVideo, user;
 
   return regeneratorRuntime.async(function postUpload$(_context5) {
     while (1) {
       switch (_context5.prev = _context5.next) {
         case 0:
           _id = req.session.user._id;
-          _req$files = req.files, video = _req$files.video, thumb = _req$files.thumb;
+          video = req.files.video;
           _req$body2 = req.body, title = _req$body2.title, description = _req$body2.description, hashtags = _req$body2.hashtags;
           isHeroku = process.env.NODE_ENV === "production";
           _context5.prev = 4;
@@ -217,7 +217,6 @@ var postUpload = function postUpload(req, res) {
             title: title,
             description: description,
             fileUrl: isHeroku ? video[0].location : video[0].path,
-            thumbUrl: isHeroku ? thumb[0].location : video[0].path,
             owner: _id,
             hashtags: _Video["default"].formatHashtags(hashtags)
           }));
