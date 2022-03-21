@@ -12,7 +12,6 @@ const fullScreenBtn = document.getElementById("fullScreen")
 const fullScreenIcon = fullScreenBtn.querySelector("i")
 const videoContainer = document.getElementById("videoContainer")
 const videoplayer = document.getElementById("videoplayer")
-const videoControls = document.querySelector("videoControls")
 
 
 let controlsTimeout = null
@@ -92,14 +91,21 @@ const hideControls = () => videoController.classList.remove("showing")
 
 const handleMouseMove = () => {
   if (controlsTimeout) {
-  clearTimeout(controlsTimeout);
-  controlsTimeout = null;
+    clearTimeout(controlsTimeout)
+    controlsTimeout = null
   }
-  videoControls.classList.add("showing");
-  controlsTimeout = setTimeout(() => {
-    videoControls.classList.remove("showing");
-  }, 3000);
-  };
+  if (constrolsMovementTimeout) {
+    clearTimeout(constrolsMovementTimeout)
+    constrolsMovementTimeout = null
+  }
+  videoController.classList.add("showing")
+  constrolsMovementTimeout = setTimeout(hideControls, 2000)
+}
+
+const handleMouseLeave = () => {
+  controlsTimeout = setTimeout(hideControls, 2000)
+  
+}
 
 
 const handleEnded = () => {
@@ -119,4 +125,5 @@ video.addEventListener("timeupdate", handleTimeUpdate)
 timeline.addEventListener("input", handleTimeLineChange)
 fullScreen.addEventListener("click" , handleFullScreen)
 video.addEventListener("mouseenter", handleMouseMove)
+video.addEventListener("mouseleave", handleMouseLeave)
 video.addEventListener("ended", handleEnded)

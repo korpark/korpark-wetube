@@ -14,7 +14,6 @@ var fullScreenBtn = document.getElementById("fullScreen");
 var fullScreenIcon = fullScreenBtn.querySelector("i");
 var videoContainer = document.getElementById("videoContainer");
 var videoplayer = document.getElementById("videoplayer");
-var videoControls = document.querySelector("videoControls");
 var controlsTimeout = null;
 var constrolsMovementTimeout = null;
 var volumeValue = 0.03;
@@ -103,10 +102,17 @@ var handleMouseMove = function handleMouseMove() {
     controlsTimeout = null;
   }
 
-  videoControls.classList.add("showing");
-  controlsTimeout = setTimeout(function () {
-    videoControls.classList.remove("showing");
-  }, 3000);
+  if (constrolsMovementTimeout) {
+    clearTimeout(constrolsMovementTimeout);
+    constrolsMovementTimeout = null;
+  }
+
+  videoController.classList.add("showing");
+  constrolsMovementTimeout = setTimeout(hideControls, 2000);
+};
+
+var handleMouseLeave = function handleMouseLeave() {
+  controlsTimeout = setTimeout(hideControls, 2000);
 };
 
 var handleEnded = function handleEnded() {
@@ -126,4 +132,5 @@ video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimeLineChange);
 fullScreen.addEventListener("click", handleFullScreen);
 video.addEventListener("mouseenter", handleMouseMove);
+video.addEventListener("mouseleave", handleMouseLeave);
 video.addEventListener("ended", handleEnded);
