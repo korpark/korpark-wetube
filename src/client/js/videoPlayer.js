@@ -91,21 +91,15 @@ const hideControls = () => videoController.classList.remove("showing")
 
 const handleMouseMove = () => {
   if (controlsTimeout) {
-    clearTimeout(controlsTimeout)
-    controlsTimeout = null
+  clearTimeout(controlsTimeout);
+  controlsTimeout = null;
   }
-  if (constrolsMovementTimeout) {
-    clearTimeout(constrolsMovementTimeout)
-    constrolsMovementTimeout = null
-  }
-  videoController.classList.add("showing")
-  constrolsMovementTimeout = setTimeout(hideControls, 2000)
-}
+  videoContainer.classList.add("showing");
+  controlsTimeout = setTimeout(() => {
+    videoContainer.classList.remove("showing");
+  }, 3000);
+  };
 
-const handleMouseLeave = () => {
-  controlsTimeout = setTimeout(hideControls, 2000)
-  
-}
 
 const handleEnded = () => {
   const { id } = videoContainer.dataset
@@ -124,5 +118,4 @@ video.addEventListener("timeupdate", handleTimeUpdate)
 timeline.addEventListener("input", handleTimeLineChange)
 fullScreen.addEventListener("click" , handleFullScreen)
 video.addEventListener("mouseenter", handleMouseMove)
-video.addEventListener("mouseleave", handleMouseLeave)
 video.addEventListener("ended", handleEnded)
