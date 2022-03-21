@@ -12,6 +12,7 @@ const fullScreenBtn = document.getElementById("fullScreen")
 const fullScreenIcon = fullScreenBtn.querySelector("i")
 const videoContainer = document.getElementById("videoContainer")
 const videoplayer = document.getElementById("videoplayer")
+const videoControls = document.querySelector("videoControls")
 
 
 let controlsTimeout = null
@@ -94,9 +95,9 @@ const handleMouseMove = () => {
   clearTimeout(controlsTimeout);
   controlsTimeout = null;
   }
-  videoContainer.classList.add("showing");
+  videoControls.classList.add("showing");
   controlsTimeout = setTimeout(() => {
-    videoContainer.classList.remove("showing");
+    videoControls.classList.remove("showing");
   }, 3000);
   };
 

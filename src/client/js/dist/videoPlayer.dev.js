@@ -14,6 +14,7 @@ var fullScreenBtn = document.getElementById("fullScreen");
 var fullScreenIcon = fullScreenBtn.querySelector("i");
 var videoContainer = document.getElementById("videoContainer");
 var videoplayer = document.getElementById("videoplayer");
+var videoControls = document.querySelector("videoControls");
 var controlsTimeout = null;
 var constrolsMovementTimeout = null;
 var volumeValue = 0.03;
@@ -102,9 +103,9 @@ var handleMouseMove = function handleMouseMove() {
     controlsTimeout = null;
   }
 
-  videoContainer.classList.add("showing");
+  videoControls.classList.add("showing");
   controlsTimeout = setTimeout(function () {
-    videoContainer.classList.remove("showing");
+    videoControls.classList.remove("showing");
   }, 3000);
 };
 
