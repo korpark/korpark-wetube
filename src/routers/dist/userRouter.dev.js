@@ -21,6 +21,7 @@ userRouter.route("/change-password").all(_middlewares.protectorMiddleware).get(_
 userRouter.get("/github/start", _middlewares.publicOnlyMiddleware, _userController.startGithubLogin);
 userRouter.get("/github/finish", _middlewares.publicOnlyMiddleware, _userController.FinishGithubLogin);
 userRouter.get("/kakao/start", _middlewares.publicOnlyMiddleware, _userController.startKakaoLogin);
+userRouter.get("/kakao/finish", _middlewares.publicOnlyMiddleware, _userController.finishKakaoLogin);
 userRouter.get("/:id", _userController.seeUserProfile);
 var _default = userRouter;
 exports["default"] = _default;

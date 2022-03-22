@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.startKakaoLogin = exports.FinishGithubLogin = exports.startGithubLogin = exports.seeUserProfile = exports.postChangePassword = exports.getChangePassword = exports.postEdit = exports.getEdit = exports.logout = exports.postLogin = exports.getLogin = exports.postJoin = exports.getJoin = void 0;
+exports.finishKakaoLogin = exports.startKakaoLogin = exports.FinishGithubLogin = exports.startGithubLogin = exports.seeUserProfile = exports.postChangePassword = exports.getChangePassword = exports.postEdit = exports.getEdit = exports.logout = exports.postLogin = exports.getLogin = exports.postJoin = exports.getJoin = void 0;
 
 var _User = _interopRequireDefault(require("../models/User"));
 
@@ -483,8 +483,80 @@ var startKakaoLogin = function startKakaoLogin(req, res) {
   };
   var params = new URLSearchParams(config).toString();
   var finalUrl = "".concat(baseUrl, "?").concat(params);
-  console.log(finalUrl);
   return res.redirect(finalUrl);
 };
 
 exports.startKakaoLogin = startKakaoLogin;
+
+var finishKakaoLogin = function finishKakaoLogin(req, res) {
+  var baseUrl, config, params, finalUrl, kakaoTokenRequest, access_token, userRequest;
+  return regeneratorRuntime.async(function finishKakaoLogin$(_context7) {
+    while (1) {
+      switch (_context7.prev = _context7.next) {
+        case 0:
+          baseUrl = "https://kauth.kakao.com/oauth/token";
+          config = {
+            client_id: process.env.KAKAO_REST_API_KEY,
+            client_secret: process.env.KAKAO_SECRET,
+            redirect_uri: process.env.KAKAO_REDIRECT_KEY,
+            code: req.query.code
+          };
+          params = new URLSearchParams(config).toString();
+          finalUrl = "".concat(baseUrl, "?").concat(params);
+          _context7.t0 = regeneratorRuntime;
+          _context7.next = 7;
+          return regeneratorRuntime.awrap((0, _nodeFetch["default"])(finalUrl, {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json" // 이 부분을 명시하지않으면 text로 응답을 받게됨
+
+            }
+          }));
+
+        case 7:
+          _context7.t1 = _context7.sent.json();
+          _context7.next = 10;
+          return _context7.t0.awrap.call(_context7.t0, _context7.t1);
+
+        case 10:
+          kakaoTokenRequest = _context7.sent;
+
+          if (!("access_token" in kakaoTokenRequest)) {
+            _context7.next = 23;
+            break;
+          }
+
+          // 엑세스 토큰이 있는 경우 API에 접근
+          access_token = kakaoTokenRequest.access_token;
+          _context7.t2 = regeneratorRuntime;
+          _context7.next = 16;
+          return regeneratorRuntime.awrap((0, _nodeFetch["default"])("https://kapi.kakao.com/v2/user/me", {
+            headers: {
+              Authorization: "Bearer ".concat(access_token),
+              "Content-type": "application/json"
+            }
+          }));
+
+        case 16:
+          _context7.t3 = _context7.sent.json();
+          _context7.next = 19;
+          return _context7.t2.awrap.call(_context7.t2, _context7.t3);
+
+        case 19:
+          userRequest = _context7.sent;
+          console.log(userRequest);
+          _context7.next = 24;
+          break;
+
+        case 23:
+          return _context7.abrupt("return", res.redirect("/login"));
+
+        case 24:
+        case "end":
+          return _context7.stop();
+      }
+    }
+  });
+};
+
+exports.finishKakaoLogin = finishKakaoLogin;
