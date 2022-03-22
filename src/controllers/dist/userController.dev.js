@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FinishGithubLogin = exports.startGithubLogin = exports.seeUserProfile = exports.postChangePassword = exports.getChangePassword = exports.postEdit = exports.getEdit = exports.logout = exports.postLogin = exports.getLogin = exports.postJoin = exports.getJoin = void 0;
+exports.startKakaoLogin = exports.FinishGithubLogin = exports.startGithubLogin = exports.seeUserProfile = exports.postChangePassword = exports.getChangePassword = exports.postEdit = exports.getEdit = exports.logout = exports.postLogin = exports.getLogin = exports.postJoin = exports.getJoin = void 0;
 
 var _User = _interopRequireDefault(require("../models/User"));
 
@@ -473,3 +473,18 @@ var FinishGithubLogin = function FinishGithubLogin(req, res) {
 };
 
 exports.FinishGithubLogin = FinishGithubLogin;
+
+var startKakaoLogin = function startKakaoLogin(req, res) {
+  var baseUrl = "https://kauth.kakao.com/oauth/authorize";
+  var config = {
+    client_id: process.env.KAKAO_REST_API_KEY,
+    redirect_url: process.env.KAKAO_REDIRECT_KEY,
+    code: req.query.code
+  };
+  var params = new URLSearchParams(config).toString();
+  var finalUrl = "".concat(baseUrl, "?").concat(params);
+  console.log(finalUrl);
+  return res.redirect(finalUrl);
+};
+
+exports.startKakaoLogin = startKakaoLogin;

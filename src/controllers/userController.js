@@ -220,3 +220,17 @@ export const FinishGithubLogin = async (req, res) => {
       return res.redirect("/")
     }
 }
+
+
+export const startKakaoLogin = (req, res) => {
+  const baseUrl = "https://kauth.kakao.com/oauth/authorize"
+  const config = {
+    client_id: process.env.KAKAO_REST_API_KEY,
+    redirect_url: process.env.KAKAO_REDIRECT_KEY,
+    code: req.query.code
+    }
+  const params = new URLSearchParams(config).toString()
+  const finalUrl = `${baseUrl}?${params}`
+  console.log(finalUrl)
+  return res.redirect(finalUrl)
+}
