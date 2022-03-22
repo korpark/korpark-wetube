@@ -235,11 +235,8 @@ export const startKakaoLogin = (req, res) => {
 }
 
 export const finishKakaoLogin = async (req, res) => {
-  const baseUrl = "https://kauth.kakao.com/oauth/token"
+  const baseUrl = "https://korpark-wetube.herokuapp.com/oauth"
   const config = {
-    client_id: process.env.KAKAO_REST_API_KEY,
-    client_secret: process.env.KAKAO_SECRET,
-    redirect_uri: process.env.KAKAO_REDIRECT_KEY,
     code: req.query.code,
   };
   const params = new URLSearchParams(config).toString();

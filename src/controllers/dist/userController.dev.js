@@ -494,11 +494,8 @@ var finishKakaoLogin = function finishKakaoLogin(req, res) {
     while (1) {
       switch (_context7.prev = _context7.next) {
         case 0:
-          baseUrl = "https://kauth.kakao.com/oauth/token";
+          baseUrl = "https://korpark-wetube.herokuapp.com/oauth";
           config = {
-            client_id: process.env.KAKAO_REST_API_KEY,
-            client_secret: process.env.KAKAO_SECRET,
-            redirect_uri: process.env.KAKAO_REDIRECT_KEY,
             code: req.query.code
           };
           params = new URLSearchParams(config).toString();
