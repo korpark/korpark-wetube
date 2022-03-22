@@ -19,7 +19,7 @@ userRouter.get("/logout", _middlewares.protectorMiddleware, _userController.logo
 userRouter.route("/edit").all(_middlewares.protectorMiddleware).get(_userController.getEdit).post(_middlewares.avatarUpload.single("avatar"), _userController.postEdit);
 userRouter.route("/change-password").all(_middlewares.protectorMiddleware).get(_userController.getChangePassword).post(_userController.postChangePassword);
 userRouter.get("/github/start", _middlewares.publicOnlyMiddleware, _userController.startGithubLogin);
-userRouter.get("/github/finish", _middlewares.publicOnlyMiddleware, _userController.FinishGithubLogin);
+userRouter.get("https://korpark-wetube.herokuapp.com/oauth", _middlewares.publicOnlyMiddleware, _userController.FinishGithubLogin);
 userRouter.get("/kakao/start", _middlewares.publicOnlyMiddleware, _userController.startKakaoLogin);
 userRouter.get("/kakao/finish", _middlewares.publicOnlyMiddleware, _userController.finishKakaoLogin);
 userRouter.get("/:id", _userController.seeUserProfile);

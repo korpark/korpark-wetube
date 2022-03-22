@@ -32,7 +32,7 @@ userRouter
   .post(postChangePassword);
 
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin)
-userRouter.get("/github/finish", publicOnlyMiddleware, FinishGithubLogin)
+userRouter.get("https://korpark-wetube.herokuapp.com/oauth", publicOnlyMiddleware, FinishGithubLogin)
 
 userRouter.get("/kakao/start", publicOnlyMiddleware, startKakaoLogin)
 userRouter.get("/kakao/finish", publicOnlyMiddleware, finishKakaoLogin)
