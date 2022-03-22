@@ -226,8 +226,8 @@ export const startKakaoLogin = (req, res) => {
   const baseUrl = "https://kauth.kakao.com/oauth/authorize"
   const config = {
     client_id: process.env.KAKAO_REST_API_KEY,
-    redirect_url: process.env.KAKAO_REDIRECT_KEY,
-    code: req.query.code
+    redirect_uri: process.env.KAKAO_REDIRECT_KEY,
+    response_type: "code"
     }
   const params = new URLSearchParams(config).toString()
   const finalUrl = `${baseUrl}?${params}`
